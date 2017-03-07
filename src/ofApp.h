@@ -2,9 +2,10 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxXmlSettings.h"
 
-#define WIDTH 1280
-#define HEIGHT 720
+//#define WIDTH 1280
+//#define HEIGHT 720
 
 class ofApp : public ofBaseApp{
 
@@ -43,8 +44,8 @@ class ofApp : public ofBaseApp{
 		//ofFbo previousFbo;
 
 		ofxPanel gui;
-		ofxFloatSlider scanSpeed;
-		ofxIntSlider scanSlitWidth;
+		//ofxFloatSlider scanSpeed;
+		//ofxIntSlider scanSlitWidth;
 		ofxToggle saveScreen;
 		ofxIntSlider saveEveryFrames;
 
@@ -55,4 +56,11 @@ class ofApp : public ofBaseApp{
 
 			bool scanForwardBackward;
 			int frameSaved;
+
+			int width;
+			int height;
+			int cameraId;
+
+			ofxXmlSettings xml;
+
 };

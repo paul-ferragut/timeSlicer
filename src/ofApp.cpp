@@ -2,14 +2,20 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	webcam.setDeviceID(1);
-	webcam.setup(WIDTH,HEIGHT);
+
+	xml.loadFile("settingsCamera.xml");
+	width=xml.getValue("width", 640, 0);
+	height=xml.getValue("height", 480, 0);
+	cameraId=xml.getValue("cameraId", 0, 0);
+
+	webcam.setDeviceID(cameraId);
+	webcam.setup(width, height);
 
 
 	gui.setup("slit scan", "settings.xml");
 	
-	gui.add(scanSpeed.setup("scanSpeed",1,1,30));
-	gui.add(scanSlitWidth.setup("scanSlitWidth", 1,1,30));
+	//gui.add(scanSpeed.setup("scanSpeed",1,1,30));
+	//gui.add(scanSlitWidth.setup("scanSlitWidth", 1,1,30));
 	gui.add(saveScreen.setup("saveScreen",false ));
 	gui.add(saveEveryFrames.setup("saveEveryFrames", 3,1,200));
 
@@ -152,7 +158,7 @@ void ofApp::draw(){
 		//}
 	}
 
-	scanCursor += scanSpeed;
+	scanCursor += 1;//scanSpeed;
 	if (scanCursor >= webcam.getWidth()) {//+scanSlitWidth
 		scanForwardBackward != scanForwardBackward;
 		scanCursor = 0;// webcam.getWidth();
@@ -168,16 +174,26 @@ void ofApp::draw(){
 	
 
 	if (saveScreen) {
+		ofSetWindowShape(webcam.getWidth(),webcam.getHeight());
 		if (frameSaved % saveEveryFrames == 0) {
 			// n is a multiple of 8
+			
 			ofSaveScreen(ofToString(frameSaved) + ".jpg");
+			
 		}
 		gui.draw();
 		//if(frameSaved/saveEveryFrames==1)
 		//ofSaveScreen(ofToString(frameSaved)+".png");
 		frameSaved++;
 	}
-	else { gui.draw(); }
+	else { gui.draw();
+	
+		ofSetColor(255, 255, 255);
+		webcam.draw(ofGetWidth()-320,0,320,240);
+		
+		ofDrawLine(ofPoint((ofGetWidth() - 320) + (scanCursor / (webcam.getWidth() / 320)), 0), ofPoint((ofGetWidth() - 320) + (scanCursor / (webcam.getWidth() / 320)), 240));
+
+	}
 
 }
 
